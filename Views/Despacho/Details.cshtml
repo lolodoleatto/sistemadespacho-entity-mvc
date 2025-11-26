@@ -1,0 +1,55 @@
+﻿@model TP_MVC_CRUD.Models.Despacho
+
+@{
+    ViewData["Title"] = $"Detalle del Despacho #{Model.DespachoId}";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="mb-3">
+    <strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy HH:mm") <br />
+    <strong>Cliente:</strong> @Model.Cliente?.Nombre @Model.Cliente?.Apellido <br />
+    <strong>Usuario:</strong> @Model.Usuario?.NombreUsuario <br />
+    <strong>Confirmado:</strong> @(Model.Confirmado ? "Sí" : "No")
+</div>
+
+<h4>Detalle de productos</h4>
+
+@if (Model.Detalles != null && Model.Detalles.Any())
+{
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Costo Unitario</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detalle in Model.Detalles)
+            {
+                <tr>
+                    <td>@detalle.Producto?.Descripcion</td>
+                    <td>@detalle.Cantidad</td>
+                    <td>@string.Format("{0:C}", detalle.CostoUnitario)</td>
+                    <td>@string.Format("{0:C}", detalle.Subtotal)</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" class="text-end">Total</th>
+                <th>
+                    @string.Format("{0:C}", Model.Detalles.Sum(d => d.Subtotal))
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+}
+else
+{
+    <p>No hay productos en este despacho.</p>
+}
+
+<a asp-action="Index" class="btn btn-sm btn-dark text-white">Volver</a>

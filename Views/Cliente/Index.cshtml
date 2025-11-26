@@ -1,0 +1,42 @@
+﻿@model IEnumerable<TP_MVC_CRUD.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Clientes";
+    Layout = "_Layout";
+}
+
+<h2 class="display-4 fw-bold text-center mb-4">Clientes</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Nuevo Cliente</a>
+</p>
+
+<table class="table table-dark table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+            <th>@Html.DisplayNameFor(model => model.Apellido)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th colspan="3" class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ClienteId" class="btn btn-sm btn-primary">Editar</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ClienteId" class="btn btn-sm btn-secondary">Detalles</a>
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.ClienteId" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

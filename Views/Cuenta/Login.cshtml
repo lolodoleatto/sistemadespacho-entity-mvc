@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="d-flex justify-content-center align-items-center bg-secondary ">
+    <div class="card shadow-sm p-4" style="width: 360px;">
+        <h2 class="text-center mb-4 text-dark">Ingreso al sistema</h2>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <form method="post" autocomplete="off" novalidate>
+            <div class="mb-3">
+                <label for="nombreUsuario" class="form-label">Usuario</label>
+                <input id="nombreUsuario" name="nombreUsuario" class="form-control form-control-lg" required autofocus placeholder="Usuario" />
+            </div>
+            <div class="mb-4">
+                <label for="contraseña" class="form-label">Contraseña</label>
+                <input id="contraseña" type="password" name="contraseña" class="form-control form-control-lg" required placeholder="Contraseña" />
+            </div>
+            <button type="submit" class="btn btn-dark btn-lg w-100">Ingresar</button>
+        </form>
+    </div>
+</div>

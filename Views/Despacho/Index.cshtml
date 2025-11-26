@@ -1,0 +1,66 @@
+﻿@model IEnumerable<TP_MVC_CRUD.Models.Despacho>
+@{
+    ViewData["Title"] = "Listado de Despachos";
+    var usuarios = (SelectList)ViewBag.Usuarios;
+}
+
+<h2 class="display-2 text-center fw-bold mb-2">@ViewData["Title"]</h2>
+
+
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+   
+    <a class="btn btn-success fw-normal" asp-area="" asp-controller="Despacho" asp-action="Create">
+        Nuevo Despacho
+    </a>
+
+    <form method="get" asp-action="Index" class="d-flex align-items-center gap-2 mb-0">
+        <span class="fw-bold me-2" style="min-width: 150px;">Filtrar por Usuario:</span>
+        <select id="usuarioId" name="usuarioId" class="form-select" onchange="this.form.submit()" style="min-width: 200px;">
+            <option value="0">-- Todos los usuarios --</option>
+            @foreach (var usuario in usuarios)
+            {
+                <option value="@usuario.Value" selected="@(usuario.Selected ? "selected" : null)">
+                    @usuario.Text
+                </option>
+            }
+        </select>
+    </form>
+   
+</div>
+
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Usuario</th>
+            <th>Confirmado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var despacho in Model)
+        {
+            <tr>
+                <td>@despacho.DespachoId</td>
+                <td>@despacho.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@despacho.Cliente?.Nombre @despacho.Cliente?.Apellido</td>
+                <td>@despacho.Usuario?.NombreUsuario</td>
+                <td>
+                    @if (despacho.Confirmado)
+                    {
+                        <span class="badge bg-success">Sí</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">No</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@despacho.DespachoId" class="btn btn-sm btn-dark text-white">Ver detalle</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

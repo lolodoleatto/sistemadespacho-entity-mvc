@@ -1,0 +1,55 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Inicio";
+
+    var usuario = HttpContextAccessor.HttpContext.Session.GetString("NombreUsuario");
+}
+
+<div class="container text-center my-5 text-white">
+    <h1 class="display-4 mb-3 text-dark">Bienvenido al Sistema de Gestión de Despachos</h1>
+    <p class="lead mb-4 fw-semibold">
+        Este sistema fue desarrollado como parte del Trabajo Práctico Final de Programación III. Acá vas a poder gestionar clientes, productos y registrar despachos de manera rápida y eficiente.
+    </p>
+
+    @if (string.IsNullOrEmpty(usuario))
+    {
+        <div class="mb-4">
+            <a class="btn btn-primary btn-lg" asp-controller="Cuenta" asp-action="Login">Iniciar sesión</a>
+        </div>
+    }
+
+
+
+    <hr class="my-5" />
+
+    <section class="my-5 text-dark">
+        <h2 class="mb-4 display-4">Integrantes del grupo</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Gallo Agustín</h5>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Fontanarrosa Luciano</h5>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Doleatto Lorenzo</h5>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,43 @@
+# ==========================
+#     VISUAL STUDIO
+# ==========================
+.vs/
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# ==========================
+#     BUILD OUTPUT
+# ==========================
+bin/
+obj/
+out/
+Debug/
+Release/
+
+# ==========================
+#     DOTNET
+# ==========================
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ==========================
+#     LOGS & TEMP
+# ==========================
+*.log
+*.tlog
+*.tmp
+*.temp
+
+# ==========================
+#     SECRETS
+# ==========================
+# NO subir tu conexión real
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+!appsettings.json   # excepto el principal limpio
+
+

@@ -1,0 +1,137 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model List<TP_MVC_CRUD.Controllers.DespachoController.ItemCarrito>
+
+@{
+    ViewData["Title"] = "Nuevo Despacho";
+
+    int totalCantidad = ViewBag.TotalCantidad ?? 0;
+    decimal totalMonto = ViewBag.TotalMonto ?? 0m;
+
+    int clienteIdSeleccionado = 0;
+    if (TempData["ClienteIdSeleccionado"] != null)
+    {
+        int.TryParse(TempData["ClienteIdSeleccionado"].ToString(), out clienteIdSeleccionado);
+    }
+
+    var clientes = new List<SelectListItem>();
+    if (ViewBag.Clientes != null)
+    {
+        clientes = ((IEnumerable<SelectListItem>)ViewBag.Clientes).ToList();
+    }
+
+    var productos = new List<SelectListItem>();
+    if (ViewBag.Productos != null)
+    {
+        productos = ((IEnumerable<SelectListItem>)ViewBag.Productos).ToList();
+    }
+}
+
+
+<h2 class="display-2 text-center fw-bold mb-2">@ViewData["Title"]</h2>
+
+<form asp-action="AgregarProducto" method="post" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label for="clienteId" class="form-label">Cliente</label>
+        <select id="clienteId" name="clienteId" class="form-select" required>
+            <option value="">-- Seleccione un cliente --</option>
+            @foreach (var cliente in clientes)
+            {
+                <option value="@cliente.Value" selected="@(cliente.Value == clienteIdSeleccionado.ToString() ? "selected" : null)">
+                    @cliente.Text
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <label for="productoId" class="form-label">Producto</label>
+        <select id="productoId" name="productoId" class="form-select" required>
+            <option value="">-- Seleccione un producto --</option>
+            @foreach (var producto in productos)
+            {
+                <option value="@producto.Value">@producto.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label for="cantidad" class="form-label">Cantidad</label>
+        <input type="number" id="cantidad" name="cantidad" class="form-control" min="1" value="1" required />
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-success w-100">Agregar</button>
+    </div>
+</form>
+
+@if (Model.Count > 0)
+{
+    <h4>Detalle del carrito</h4>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Costo Unitario</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Descripcion</td>
+                    <td>@item.Cantidad</td>
+                    <td>@string.Format("{0:C}", item.CostoUnitario)</td>
+                    <td>@string.Format("{0:C}", item.Subtotal)</td>
+                    <td>
+                        <form asp-action="RemoverProducto" method="post" style="display:inline;">
+                            <input type="hidden" name="productoId" value="@item.ProductoId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Total</th>
+                <th>@totalCantidad</th>
+                <th></th>
+                <th>@string.Format("{0:C}", totalMonto)</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    /*@if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }*/
+
+
+    
+    <div class="mb-3 border p-3 bg-light rounded">
+        <strong>Usuario: </strong>@HttpContextAccessor.HttpContext.Session.GetString("NombreUsuario") <br />
+        <strong>Total de productos:</strong> @totalCantidad <br />
+        <strong>Monto total:</strong> @string.Format("{0:C}", totalMonto)
+    </div>
+
+    <form asp-controller="Despacho" asp-action="Confirmar" method="post">
+        <input type="hidden" name="clienteId" value="@clienteIdSeleccionado" />
+        <button type="submit" class="btn btn-success">Confirmar Pedido</button>
+    </form>
+
+}
+else
+{
+    <p>No hay productos en el carrito.</p>
+}
+<a asp-action="Index" class="btn btn-sm btn-dark text-white mt-4">Volver</a>
